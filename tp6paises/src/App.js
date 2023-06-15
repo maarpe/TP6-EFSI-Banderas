@@ -8,6 +8,7 @@ function App() {
   const [paises, setPaises] = useState([]);
   const [randomPais, setRandom] = useState({});
   const [timer, setTimer] = useState(15);
+  const [idTimer, setIdTimer] = useState(0);
 
   useEffect(() => {
     axios.get('https://countriesnow.space/api/v0.1/countries/flag/images')
@@ -18,38 +19,51 @@ function App() {
         const randomPais = paisesResponse[Math.floor(Math.random() * paisesResponse.length)];
         setRandom(randomPais);
       });
-    
+
   }, []);
 
-  useEffect(() => {
-    setTimeout(function() {
+  const iniciar = () => {
+    let idTimer = setTimeout(function () {
       if (timer > 0) {
         console.log(timer);
         setTimer(timer - 1);
       } else {
-        console.log("¡Tiempo terminado!");
-        setTimer(15);
         cambiarPais();
       }
     }, 1000);
+    setIdTimer(idTimer);
+  }
+
+  useEffect(() => {
+    iniciar();
   }, [timer]);
 
+  function reiniciarTimer() {
+    clearTimeout(idTimer);
+    setTimer(15);
+    //idTimer = setTimeout(setIdTimer(idTimer, 1000))
+  }
+
   let cambiarPais = () => {
+    reiniciarTimer();
     let id = Math.floor(Math.random() * (paises.length + 1));
     setRandom(paises[id]);
-    if(contador > 0) setContador(contador - 1);
+    iniciar();
+    //if (contador > 0) setContador(contador - 1);
+
   }
 
   let validarNombre = (e) => {
-    if(nombre === randomPais.name){
+    if (nombre === randomPais.name) {
       setContador(10);
-    } else{
-      if(contador > 0) setContador(contador - 1);
+    } else {
+      if (contador > 0) setContador(contador - 1);
     }
     cambiarPais();
+    reiniciarTimer();
     setNombre('');
   }
-  
+
   return (
     <div className='App-header'>
       <p className='timer'>{timer}</p>
