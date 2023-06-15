@@ -7,6 +7,7 @@ function App() {
   const [nombre, setNombre] = useState('');
   const [paises, setPaises] = useState([]);
   const [randomPais, setRandom] = useState({});
+  const [timer, setTimer] = useState(15);
 
   useEffect(() => {
     axios.get('https://countriesnow.space/api/v0.1/countries/flag/images')
@@ -20,28 +21,44 @@ function App() {
     
   }, []);
 
+  useEffect(() => {
+    setTimeout(function() {
+      if (timer > 0) {
+        console.log(timer);
+        setTimer(timer - 1);
+      } else {
+        console.log("¡Tiempo terminado!");
+        setTimer(15);
+        cambiarPais();
+      }
+    }, 1000);
+  }, [timer]);
+
   let cambiarPais = () => {
     let id = Math.floor(Math.random() * (paises.length + 1));
-    setPaises(paises[id]);
+    setRandom(paises[id]);
+    if(contador > 0) setContador(contador - 1);
   }
 
-  useEffect(() => {
+  let validarNombre = (e) => {
     if(nombre === randomPais.name){
-      contador = contador + 10;
-      cambiarPais();
-    }
-    else{
+      setContador(10);
+    } else{
       if(contador > 0) setContador(contador - 1);
     }
-  })
+    cambiarPais();
+    setNombre('');
+  }
   
   return (
     <div className='App-header'>
+      <p className='timer'>{timer}</p>
       <div className='container'>
         {randomPais.flag ? <img src={randomPais.flag} /> : <div></div>}
         <div className='botonSubmit'>
-          <input type="text" class="form-control" placeholder="Nombre bandera" onSubmit={(e) => setNombre(e.target.value)} />
-          <button onSubmit={contador}>Ver si es correcto</button>
+          <input type="text" className="form-control" placeholder="Nombre bandera" onKeyUp={(e) => setNombre(e.target.value)} />
+          <button onClick={(e) => validarNombre(e)}>Ver si es correcto</button>
+          <button className='skip' onClick={() => cambiarPais()}>Skip</button>
           <div className='contador'>
             PUNTOS: {contador}
           </div>
