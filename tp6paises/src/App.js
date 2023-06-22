@@ -65,7 +65,9 @@ function App() {
       if (contador > 0) setContador(contador - 1);
     }
     console.log(e);
-    e.target.value = " ";
+    const input = document.getElementById("flagInput");
+    console.log()
+    input.value = "";
     cambiarPais();
     reiniciarTimer();
     setNombre('');
@@ -77,7 +79,7 @@ function App() {
       <div className='container'>
         {randomPais.flag ? <img src={randomPais.flag} /> : <div></div>}
         <div className='botonSubmit'>
-          <input type="text" className="form-control" placeholder="Nombre bandera" onKeyUp={(e) => setNombre(e.target.value)} />
+          <input id='flagInput' type="text" className="form-control" placeholder="Nombre bandera" onKeyUp={(e) => setNombre(e.target.value)} />
           <button onClick={(e) => validarNombre(e)}>Ver si es correcto</button>
           <button className='skip' onClick={() => cambiarPais()}>Skip</button>
           <div className='contador'>

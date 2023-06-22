@@ -15,7 +15,8 @@
 }
 
 .App-header {
-  background-color: #454b57;
+  background-image: url("../../newyork.jpg");
+  background-size: cover;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
