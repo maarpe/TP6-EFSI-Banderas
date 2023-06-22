@@ -36,7 +36,7 @@ function App() {
 
   useEffect(() => {
     iniciar();
-  }, [timer]);
+  },[timer]);
 
   function reiniciarTimer() {
     clearTimeout(idTimer);
@@ -48,17 +48,24 @@ function App() {
     reiniciarTimer();
     let id = Math.floor(Math.random() * (paises.length + 1));
     setRandom(paises[id]);
-    iniciar();
+    if(contador > 0){
+      if(nombre !== randomPais.name || timer === 0){
+        setContador(contador -1);
+      }
+    }
+    //iniciar();
     //if (contador > 0) setContador(contador - 1);
 
   }
 
   let validarNombre = (e) => {
     if (nombre === randomPais.name) {
-      setContador(10);
+      setContador(contador + 10);
     } else {
       if (contador > 0) setContador(contador - 1);
     }
+    console.log(e);
+    e.target.value = " ";
     cambiarPais();
     reiniciarTimer();
     setNombre('');
